@@ -1,6 +1,7 @@
 import argparse
 import os
 import shutil
+import resource
 
 from modules.enhance import enhance_frames
 from modules.erase import remove_watermark
@@ -40,9 +41,9 @@ def process_video(
     update_status("Create video")
     create_video(input_path, output_path, fps)
 
-    if os.path.exists(file_name):
-        shutil.rmtree(file_name)
-        update_status("Temporary request directory {} deleted".format(file_name))
+    # if os.path.exists(file_name):
+    #     shutil.rmtree(file_name)
+    #     update_status("Temporary request directory {} deleted".format(file_name))
 
     update_status(f"Done! {input_path}")
 
@@ -69,8 +70,13 @@ def process_input(
     else:
         print(f"Invalid input path: {input_path}")
 
+def set_memory_limit(max_memory_mb):
+    max_memory = max_memory_mb * 1024 * 1024
+    resource.setrlimit(resource.RLIMIT_AS, (max_memory, max_memory))
 
 def main():
+    set_memory_limit(1024 * 50)
+
     parser = argparse.ArgumentParser(
         description="KLing-Video-WatermarkRemover-Enhancer"
     )

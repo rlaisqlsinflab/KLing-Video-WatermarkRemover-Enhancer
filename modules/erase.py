@@ -34,6 +34,7 @@ def inpaint_video(
     - results: A list of inpainted frame images.
     """
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"device: {device}")
     # build sttn model
     model = build_sttn_model(ckpt_p, device)
 

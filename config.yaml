@@ -1,8 +1,8 @@
 watermark:
-  position: [556, 1233, 701, 1267]
-  ckpt_p: "./weights/sttn.pth"
-  mask_expand: 30
+  position: [1226, 704, 1273, 713]
+  mask_expand: 10
   neighbor_stride: 10
+  ckpt_p: "./weights/sttn.pth"
 
 enhance:
   RealESRGAN_model_path: "./weights/RealESRGAN_x2plus.pth"
