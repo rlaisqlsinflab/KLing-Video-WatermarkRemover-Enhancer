@@ -82,8 +82,8 @@ if [ "$duration" -gt 10 ]; then
     concat_file="${temp_dir}/concat_list.txt"
     printf "file '%s'\n" "${processed_segments[@]}" >"$concat_file"
 
-    # 세그먼트들을 합치기
-    ffmpeg -f concat -safe 0 -i "$concat_file" -c copy "${OUTPUT_DIR}/${base_name}_cleaned.mp4"
+    # 세그먼트들을 합치기 (원본 영상에서 음성 추출하여 합성)
+    ffmpeg -f concat -safe 0 -i "$concat_file" -i "$video_file" -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 -shortest "${OUTPUT_DIR}/${base_name}_cleaned.mp4"
     echo "Merged segments into: ${OUTPUT_DIR}/${base_name}_cleaned.mp4"
 
     # S3에 업로드
