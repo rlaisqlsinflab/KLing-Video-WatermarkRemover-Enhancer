@@ -3,7 +3,6 @@ import os
 import shutil
 import resource
 
-from modules.enhance import enhance_frames
 from modules.erase import remove_watermark
 from utils.logging_utils import update_status
 from utils.video_utils import (
@@ -33,10 +32,6 @@ def process_video(
     if remove_watermark_flag:
         update_status("Erase: removing watermark...")
         remove_watermark(frame_paths)
-
-    if enhance_video_flag:
-        update_status("Enhance: video enhancement...")
-        enhance_frames(frame_paths)
 
     update_status("Create video")
     create_video(input_path, output_path, fps)
