@@ -41,6 +41,27 @@ def detect_fps(target_path: str) -> float:
     return 30
 
 
+def check_audio_stream(target_path: str) -> bool:
+    """Check if the video file has an audio stream."""
+    command = [
+        "ffprobe",
+        "-v",
+        "error",
+        "-select_streams",
+        "a:0",
+        "-show_entries",
+        "stream=index",
+        "-of",
+        "csv=p=0",
+        target_path,
+    ]
+    try:
+        output = subprocess.check_output(command, stderr=subprocess.DEVNULL).decode().strip()
+        return bool(output)
+    except Exception:
+        return False
+
+
 def extract_frames(
     target_path: str, fps: float = 30, temp_frame_quality: int = 1
 ) -> bool:
@@ -69,15 +90,29 @@ def create_video(
 ) -> bool:
     temp_directory_path = get_temp_directory_path(target_path)
 
+    # Check if original video has audio
+    has_audio = check_audio_stream(target_path)
+    
     commands = [
         "-hwaccel", "auto",
         "-r", str(fps),
         "-i", os.path.join(temp_directory_path, "%04d." + TEMP_FRAME_FORMAT),
+    ]
+    
+    if has_audio:
+        # Add original video as second input for audio
+        commands.extend(["-i", target_path])
+        # Copy audio from original video
+        commands.extend(["-c:a", "copy"])
+        # Map video from frames and audio from original
+        commands.extend(["-map", "0:v:0", "-map", "1:a:0"])
+    
+    commands.extend([
         "-c:v", output_video_encoder,
         "-pix_fmt", "yuv420p",
         "-vf", "pad=ceil(iw/2)*2:ceil(ih/2)*2",
         "-y", output_path
-    ]
+    ])
 
     return run_ffmpeg(commands)
 
