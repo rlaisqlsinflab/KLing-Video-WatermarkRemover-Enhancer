@@ -28,7 +28,7 @@ S3_DESTINATION="s3://vod-ttest-destination-1dka6y7nswcjj/videos/961f71a8-ab19-4f
 mkdir -p "$OUTPUT_DIR"
 
 # 특정 숫자로 시작하는 mp4 파일 찾기 (첫 번째 매치만)
-video_file=$(find "$BASE_PATH" -name "${file_number}*.mp4" -type f | head -n 1)
+video_file=$(find "$BASE_PATH" -name "${file_number}.*.mp4" -type f | head -n 1)
 
 if [ -z "$video_file" ]; then
   echo "Error: ${file_number}로 시작하는 mp4 파일을 찾을 수 없습니다."
