@@ -69,10 +69,10 @@ if [ "$duration" -gt 10 ]; then
       python3 main.py --input "$segment" --remove-watermark
 
       # 처리된 파일명 확인 (outputs에 생성되었을 것)
-      if [ -f "outputs/${segment_name}_cleaned.mp4" ]; then
-        processed_segments+=("outputs/${segment_name}_cleaned.mp4")
-      elif [ -f "outputs/${segment_name}.mp4" ]; then
-        processed_segments+=("outputs/${segment_name}.mp4")
+      if [ -f "$temp_dir/${segment_name}_cleaned.mp4" ]; then
+        processed_segments+=("$temp_dir/${segment_name}_cleaned.mp4")
+      elif [ -f "$temp_dir/${segment_name}.mp4" ]; then
+        processed_segments+=("$temp_dir/${segment_name}.mp4")
       fi
     fi
   done
@@ -114,11 +114,11 @@ else
 
   # 결과 파일을 올바른 위치로 이동
   cleaned_file=""
-  if [ -f "outputs/${base_name}_cleaned.mp4" ]; then
-    cleaned_file="outputs/${base_name}_cleaned.mp4"
+  if [ -f "$temp_dir/${base_name}_cleaned.mp4" ]; then
+    cleaned_file="$temp_dir/${base_name}_cleaned.mp4"
     echo "File already in correct location: outputs/${base_name}_cleaned.mp4"
-  elif [ -f "outputs/${base_name}.mp4" ]; then
-    mv "outputs/${base_name}.mp4" "${OUTPUT_DIR}/${base_name}_cleaned.mp4"
+  elif [ -f "$temp_dir/${base_name}.mp4" ]; then
+    mv "$temp_dir/${base_name}.mp4" "${OUTPUT_DIR}/${base_name}_cleaned.mp4"
     cleaned_file="${OUTPUT_DIR}/${base_name}_cleaned.mp4"
     echo "Moved to: ${OUTPUT_DIR}/${base_name}_cleaned.mp4"
   fi
@@ -143,10 +143,8 @@ else
 fi
 
 # 임시 파일 정리
-rm -rf "$temp_dir"
 echo "Completed processing: $video_file"
 echo "=========================="
 
 # 전체 임시 디렉토리 정리
-rm -rf "$TEMP_DIR"
 echo "Processing completed successfully!"
