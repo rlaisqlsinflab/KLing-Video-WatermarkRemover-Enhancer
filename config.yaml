@@ -1,6 +1,6 @@
 watermark:
   position: [1226, 790, 1273, 713]
-  mask_expand: 7
+  mask_expand: 10
   neighbor_stride: 5
   ckpt_p: "./weights/sttn.pth"
 
