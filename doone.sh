@@ -1,10 +1,15 @@
 #!/bin/bash
 
 # 숫자 입력 받기
-echo "처리할 파일의 시작 숫자를 입력하세요:"
-read -r file_number
+file_number=$1
 
 # 입력 값 검증
+if [ -z "$file_number" ]; then
+  echo "Usage: $0 <숫자>"
+  echo "Example: $0 123"
+  exit 1
+fi
+
 if [[ ! "$file_number" =~ ^[0-9]+$ ]]; then
   echo "Error: 숫자만 입력해주세요."
   exit 1
